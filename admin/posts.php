@@ -27,8 +27,9 @@ $where = [];
 $params = [];
 
 if ($searchQuery !== '') {
-    $where[] = "(posts.title LIKE :q OR posts.content LIKE :q)";
-    $params[':q'] = '%' . $searchQuery . '%';
+    $where[] = "(posts.title LIKE :q_title OR posts.content LIKE :q_content)";
+    $params[':q_title'] = '%' . $searchQuery . '%';
+    $params[':q_content'] = '%' . $searchQuery . '%';
 }
 
 if ($categoryFilter !== '' && in_array($categoryFilter, $categories)) {

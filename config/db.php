@@ -12,7 +12,6 @@ require_once __DIR__ . '/config.php';
 
 // Database Credentials (Default XAMPP / WAMP / MAMP configuration)
 define('DB_HOST', 'localhost');
-define('DB_PORT', '3306');
 define('DB_NAME', 'blog');
 define('DB_USER', 'root');
 define('DB_PASS', '');
@@ -20,7 +19,8 @@ define('DB_CHARSET', 'utf8mb4');
 
 /**
  * Returns a shared PDO database connection instance.
- * Configured with strict error reporting and prepared statement emulation disabled.
+ * Automatically tries standard port 3306, and gracefully falls back to port 3307
+ * if XAMPP MySQL was configured on an alternate port.
  *
  * @return PDO
  */
@@ -28,29 +28,36 @@ function getDBConnection() {
     static $pdo = null;
 
     if ($pdo === null) {
-        $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
-        $options = [
-            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, // Throw exceptions on errors
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,       // Return associative arrays
-            PDO::ATTR_EMULATE_PREPARES   => false,                  // Native prepared statements
-            PDO::ATTR_TIMEOUT            => 5,
-        ];
+        $portsToTry = [3306, 3307];
+        $lastException = null;
 
-        try {
-            $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
-        } catch (PDOException $e) {
-            // Check if database 'blog' does not exist yet (Error 1049 in MySQL)
-            if ($e->getCode() == 1049) {
-                // If the user hasn't run the installer yet, redirect or show friendly prompt
-                $installUrl = BASE_URL . '/setup/install.php';
-                if (!headers_sent() && basename($_SERVER['SCRIPT_NAME']) !== 'install.php') {
-                    header("Location: $installUrl");
-                    exit;
+        foreach ($portsToTry as $port) {
+            $dsn = "mysql:host=" . DB_HOST . ";port=" . $port . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
+            $options = [
+                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES   => false,
+                PDO::ATTR_TIMEOUT            => 2,
+            ];
+
+            try {
+                $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+                break; // Connection succeeded!
+            } catch (PDOException $e) {
+                $lastException = $e;
+                // If database 'blog' does not exist yet (Error 1049), but MySQL server was reached:
+                if ($e->getCode() == 1049) {
+                    $installUrl = BASE_URL . '/setup/install.php';
+                    if (!headers_sent() && basename($_SERVER['SCRIPT_NAME'] ?? '') !== 'install.php') {
+                        header("Location: $installUrl");
+                        exit;
+                    }
                 }
             }
+        }
 
-            // Friendly error screen for database connection troubleshooting
-            $errorMsg = htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+        if ($pdo === null && $lastException !== null) {
+            $errorMsg = htmlspecialchars($lastException->getMessage(), ENT_QUOTES, 'UTF-8');
             die("
             <!DOCTYPE html>
             <html lang='en'>
@@ -71,7 +78,7 @@ function getDBConnection() {
                             <div class='alert alert-secondary font-monospace small mb-4'>$errorMsg</div>
                             <h5>Troubleshooting Steps:</h5>
                             <ol class='mb-4'>
-                                <li>Make sure <strong>Apache</strong> and <strong>MySQL</strong> are running in XAMPP / WAMP Control Panel.</li>
+                                <li>Make sure <strong>Apache</strong> and <strong>MySQL</strong> are running in XAMPP Control Panel.</li>
                                 <li>If the <strong>'blog'</strong> database is not created yet, run our 1-click installer:</li>
                             </ol>
                             <div class='d-grid gap-2'>

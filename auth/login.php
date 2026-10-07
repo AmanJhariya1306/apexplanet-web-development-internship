@@ -45,8 +45,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdo = getDBConnection();
             
             // Prepared Statement to prevent SQL Injection (Task-4)
-            $stmt = $pdo->prepare("SELECT id, username, email, password, role FROM users WHERE username = :ident OR email = :ident LIMIT 1");
-            $stmt->execute([':ident' => $identifier]);
+            $stmt = $pdo->prepare("SELECT id, username, email, password, role FROM users WHERE username = :user_ident OR email = :email_ident LIMIT 1");
+            $stmt->execute([
+                ':user_ident'  => $identifier,
+                ':email_ident' => $identifier
+            ]);
             $user = $stmt->fetch();
 
             // Verify Password using standard BCRYPT algorithm (Task-2)
