@@ -1,0 +1,301 @@
+/**
+ * ApexPlanet Web Development Internship - Final Project
+ * Custom Theme Stylesheet (Task-3: UI Improvements)
+ */
+
+:root {
+    --primary: #0d7a6f;
+    --primary-dark: #08524a;
+    --primary-light: #e6f7f5;
+    --secondary: #64748b;
+    --accent: #f59e0b;
+    --dark: #0f172a;
+    --light-bg: #f8fafc;
+    --card-border: #e2e8f0;
+    --text-main: #334155;
+    --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: var(--light-bg);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+/* Navbar */
+.navbar-brand-custom {
+    font-weight: 700;
+    font-size: 1.35rem;
+    color: var(--primary) !important;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navbar-brand-custom .brand-icon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #0d7a6f 0%, #14b8a6 100%);
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 1.15rem;
+}
+
+.nav-link {
+    font-weight: 500;
+    color: #475569;
+    transition: color 0.2s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--primary) !important;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, #084c45 0%, #0d7a6f 50%, #115e59 100%);
+    color: white;
+    padding: 3.5rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: var(--light-bg);
+    clip-path: polygon(0 100%, 100% 100%, 100% 0);
+}
+
+.hero-badge {
+    background-color: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #f0fdfa;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+/* Post Cards */
+.post-card {
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+    border-color: #cbd5e1;
+}
+
+.post-category-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.3rem 0.65rem;
+    border-radius: 6px;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: inline-block;
+}
+
+.post-card-title {
+    font-weight: 700;
+    color: var(--dark);
+    font-size: 1.25rem;
+    line-height: 1.4;
+    transition: color 0.2s;
+}
+
+.post-card-title:hover {
+    color: var(--primary);
+}
+
+.post-card-excerpt {
+    color: #64748b;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.post-author-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    color: var(--primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+/* Buttons */
+.btn-primary-custom {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    font-weight: 600;
+}
+
+.btn-primary-custom:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    color: white;
+}
+
+.btn-outline-primary-custom {
+    color: var(--primary);
+    border-color: var(--primary);
+    font-weight: 600;
+}
+
+.btn-outline-primary-custom:hover {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+/* Search Box */
+.search-container {
+    background: white;
+    padding: 6px;
+    border-radius: 50px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    border: none;
+    box-shadow: none !important;
+    padding-left: 1.2rem;
+    font-size: 1rem;
+}
+
+/* Pagination */
+.pagination .page-item .page-link {
+    color: var(--primary);
+    border-color: #e2e8f0;
+    font-weight: 600;
+    margin: 0 2px;
+    border-radius: 8px;
+    padding: 0.5rem 0.85rem;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #94a3b8;
+}
+
+/* Single Post View */
+.article-header {
+    background: white;
+    border-bottom: 1px solid var(--card-border);
+    padding: 3rem 0;
+}
+
+.article-content {
+    font-size: 1.15rem;
+    line-height: 1.85;
+    color: #1e293b;
+}
+
+.article-content p {
+    margin-bottom: 1.5rem;
+}
+
+/* Admin Table & Badges */
+.table-modern {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.table-modern thead th {
+    background: #f8fafc;
+    color: #475569;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 1rem 1.25rem;
+}
+
+.table-modern tbody td {
+    padding: 1rem 1.25rem;
+    vertical-align: middle;
+}
+
+/* Dashboard Metric Cards */
+.stat-card {
+    background: white;
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+
+.stat-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+}
+
+/* Footer */
+footer {
+    background: #0f172a;
+    color: #94a3b8;
+    padding: 3rem 0 1.5rem;
+    margin-top: 4rem;
+}
+
+footer a {
+    color: #cbd5e1;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+footer a:hover {
+    color: #2dd4bf;
+}

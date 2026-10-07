@@ -1,0 +1,19 @@
+# Environment and Server files
+.env
+*.log
+error_log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary uploads / cache
+/tmp/
+/cache/
